@@ -7,26 +7,20 @@ fn main(input: &str) -> (u32, u32) {
     (sum(input, false), sum(input, true))
 }
 
-fn sum(input: &str, part2: bool) -> u32 {
-    input.lines().filter_map(|l| line_val(l, part2)).sum()
+fn sum(input: &str, p2: bool) -> u32 {
+    input.lines().filter_map(|l| line_val(l, p2)).sum()
 }
 
-fn line_val(line: &str, part2: bool) -> Option<u32> {
+fn line_val(line: &str, p2: bool) -> Option<u32> {
     let v: Vec<u32> = line
         .chars()
         .enumerate()
-        .filter_map(|(pos, c)| val(line, pos, c, part2))
+        .filter_map(|(i, c)| val(line, i, c, p2))
         .collect();
     Some(v.first()? * 10 + v.last()?)
 }
 
-fn val(line: &str, pos: usize, c: char, part2: bool) -> Option<u32> {
-    match c {
-        d if d.is_digit(10) => d.to_digit(10),
-        _ if part2 => WORDS
-            .iter()
-            .enumerate()
-            .find_map(|(i, w)| line[pos..].starts_with(w).then_some(i as u32 + 1)),
-        _ => None,
-    }
+fn val(line: &str, i: usize, c: char, p2: bool) -> Option<u32> {
+    c.to_digit(10)
+        .or_else(|| p2.then_some(WORDS.iter().position(|w| line[i..].starts_with(w))? as u32 + 1))
 }
