@@ -2,9 +2,9 @@ use regex::Regex;
 
 #[aors::main]
 fn main(input: &str) -> (usize, u32) {
-    let red = Regex::new("([0-9]+) red").ok().unwrap();
-    let green = Regex::new("([0-9]+) green").ok().unwrap();
-    let blue = Regex::new("([0-9]+) blue").ok().unwrap();
+    let red = Regex::new("([0-9]+) red").unwrap();
+    let green = Regex::new("([0-9]+) green").unwrap();
+    let blue = Regex::new("([0-9]+) blue").unwrap();
 
     let games = input
         .lines()
