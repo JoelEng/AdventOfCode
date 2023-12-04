@@ -1,4 +1,4 @@
-use memoize::memoize;
+use hashbrown::HashMap;
 
 #[aors::main]
 fn main(input: &str) -> (u32, u32) {
@@ -11,23 +11,24 @@ fn main(input: &str) -> (u32, u32) {
         .iter()
         .map(|(w, y)| 2_u32.pow(wins(w, y) as u32 - 1))
         .sum();
-    let mut p2 = 0;
-    for (i, _) in cards.iter().enumerate() {
-        p2 += new_cards(i, cards.clone());
-    }
+
+    let mut memo = HashMap::new();
+    let p2 = (0..cards.len())
+        .map(|i| new_cards(i, &cards, &mut memo))
+        .sum();
     (p1, p2)
 }
 
-#[memoize]
-fn new_cards(i: usize, cards: Vec<(Vec<u32>, Vec<u32>)>) -> u32 {
-    let mut count = 0;
-    if i < cards.len() {
-        count += 1;
-        let (w, y) = cards.get(i).unwrap();
-        for i in i + 1..=i + wins(w, y) {
-            count += new_cards(i, cards.clone());
-        }
+fn new_cards(i: usize, cards: &Vec<(Vec<u32>, Vec<u32>)>, memo: &mut HashMap<usize, u32>) -> u32 {
+    if let Some(c) = memo.get(&i) {
+        return *c;
     }
+    let mut count = 1;
+    let (w, y) = cards.get(i).unwrap();
+    for i in i + 1..=i + wins(w, y) {
+        count += new_cards(i, cards, memo);
+    }
+    memo.insert(i, count);
     count
 }
 
