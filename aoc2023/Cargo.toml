@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 aors = "0.3.1"
 regex = "1.10"
+memoize = "0.4"
