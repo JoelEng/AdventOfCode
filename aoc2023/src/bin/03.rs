@@ -11,14 +11,13 @@ fn main(input: &str) -> (u32, u32) {
         map.insert(n.start(), s);
     }
 
-    let p1 = a(input, &map, false).unwrap().iter().flatten().sum();
-    let p2 = a(input, &map, true).unwrap();
+    let p1 = find(input, &map, false).unwrap().iter().flatten().sum();
+    let p2 = find(input, &map, true).unwrap();
     (p1, p2.iter().map(|v| v.iter().product::<u32>()).sum())
 }
 
-fn a(input: &str, map: &BTreeMap<usize, u32>, p2: bool) -> Option<Vec<Vec<u32>>> {
+fn find(input: &str, map: &BTreeMap<usize, u32>, p2: bool) -> Option<Vec<Vec<u32>>> {
     let mut res = vec![];
-
     for s in Regex::new(r"[^0-9.\n]").ok()?.captures_iter(input) {
         let s = s.get(0)?;
         let mut set = HashSet::new();
