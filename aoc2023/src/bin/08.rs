@@ -21,11 +21,11 @@ fn run(s: Vec<&str>, e: Vec<&str>, m: &HashMap<&str, (&str, &str)>, d: &Vec<char
 }
 
 fn cycle(s: &str, e: &Vec<&str>, m: &HashMap<&str, (&str, &str)>, d: &Vec<char>) -> usize {
-    let (mut current, mut i) = (s, 0);
-    while !e.contains(&current) {
-        current = match d[i % d.len()] {
-            'L' => m.get(&current).unwrap().0,
-            _ => m.get(&current).unwrap().1,
+    let (mut s, mut i) = (s, 0);
+    while !e.contains(&s) {
+        s = match d[i % d.len()] {
+            'L' => m.get(&s).unwrap().0,
+            _ => m.get(&s).unwrap().1,
         };
         i += 1;
     }
