@@ -11,3 +11,4 @@ regex = "1.10"
 hashbrown = "0.14"
 itertools = "0.12"
 num = "0.4"
+phf = {version = "0.11", features = ["macros"]}
