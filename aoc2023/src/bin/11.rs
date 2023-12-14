@@ -1,5 +1,3 @@
-use num::abs;
-
 #[aors::main]
 fn main(input: &str) -> (i64, i64) {
     let grid: Vec<Vec<char>> = input.lines().map(|l| l.chars().collect()).collect();
@@ -12,26 +10,19 @@ fn main(input: &str) -> (i64, i64) {
             rows.push(i);
         }
     }
-    let mut galaxies = vec![];
-    let (mut p1, mut p2) = (0, 0);
-    for i in 0..grid.len() {
-        for j in 0..grid.len() {
-            if grid[i][j] == '#' {
-                for (oi, oj) in &galaxies {
-                    let exp_y = rows
-                        .iter()
-                        .filter(|r| (i.min(*oi)..i.max(*oi)).contains(r))
-                        .count() as i64;
-                    let exp_x = cols
-                        .iter()
-                        .filter(|c| (j.min(*oj)..j.max(*oj)).contains(c))
-                        .count() as i64;
-                    let steps_y = abs(i as i64 - *oi as i64);
-                    let steps_x = abs(j as i64 - *oj as i64);
-                    p1 += steps_y + steps_x + exp_y + exp_x;
-                    p2 += steps_y + steps_x + (1000000 - 1) * (exp_y + exp_x);
+    let (mut galaxies, mut p1, mut p2) = (vec![], 0, 0);
+    for y in 0..grid.len() {
+        for x in 0..grid.len() {
+            if grid[y][x] == '#' {
+                for (oy, ox) in &galaxies {
+                    let (ry, rx) = (y.min(*oy)..y.max(*oy), x.min(*ox)..x.max(*ox));
+                    let ey = rows.iter().filter(|r| ry.contains(r)).count() as i64;
+                    let ex = cols.iter().filter(|c| rx.contains(c)).count() as i64;
+                    let diff = (y as i64 - *oy as i64).abs() + (x as i64 - *ox as i64).abs();
+                    p1 += diff + ey + ex;
+                    p2 += diff + (1000000 - 1) * (ey + ex);
                 }
-                galaxies.push((i, j));
+                galaxies.push((y, x));
             }
         }
     }
